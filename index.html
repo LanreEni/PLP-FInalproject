@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAVE THE NEXT GENERATION - Main</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- 🔹 Header -->
+  <nav class="foundation-header">
+    <div class="title">SAVE THE NEXT GENERATION</div>
+    <div class="tagline">“Our parents didn’t know, but now we know”</div>
+  </nav>
+
+  <!-- 🔹 Navigation -->
+  <div class="navbar">
+    <a href="#" id="navRegister" class="active">📝 Register</a>
+    <a href="#" id="navTest">🧪 Record Tests</a>
+    <a href="#" id="navSearch">🔎 Search Records</a>
+  </div>
+
+
+  <!-- 🔹 Page Content -->
+  <div class="container">
+    <!-- Register -->
+    <div class="tab-content active" id="registerContent">
+      <div class="card-section">
+        <h2>Register Patient</h2>
+        <form id="registrationForm">
+          <div class="form-group">
+            <label for="patientId">Patient ID</label>
+            <div style="display:flex;gap:10px;align-items:center;">
+              <input type="text" id="patientId" name="patientId" style="flex:1;">
+              <button type="button" id="generateIdBtn" class="main-btn" style="padding:8px 16px;font-size:0.95rem;">Generate ID</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="dob">Date of Birth</label>
+            <input type="date" id="dob" name="dob" required>
+          </div>
+          <div class="form-group">
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender" required>
+              <option value="">Select...</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone">
+          </div>
+          <button type="submit" class="main-btn" id="registerBtn">Register Patient</button>
+        </form>
+        <div id="registerMsg" class="message" style="display:none;"></div>
+      </div>
+    </div>
+
+    <!-- Record Test -->
+    <div class="tab-content" id="testContent">
+      <div class="card-section">
+        <h2>Record Test</h2>
+        <form id="testForm" class="grid">
+          <div class="card">
+            <label>🔢 Patient ID *</label>
+            <small>Unique identifier for the patient</small>
+            <input type="text" id="testPatientId" required>
+          </div>
+          <div class="card">
+            <label>📅 Test Date *</label>
+            <small>Date when tests were conducted</small>
+            <div style="display:flex;gap:10px;align-items:center;">
+              <input type="text" id="testDate" readonly required style="flex:1;">
+              <button type="button" id="setDateBtn" class="main-btn" style="padding:8px 16px;font-size:0.95rem;">Set Today</button>
+            </div>
+          </div>
+          <div class="card">
+            <label>🦠 Malaria Test</label>
+            <small>Select result</small>
+            <select id="malaria" required>
+              <option value="">Select...</option>
+              <option value="Negative">Negative</option>
+              <option value="Positive">Positive</option>
+              <option value="Inconclusive">Inconclusive</option>
+            </select>
+          </div>
+          <div class="card">
+            <label>🧬 Genotype Test</label>
+            <small>Select genotype</small>
+            <select id="genotype" required>
+              <option value="">Select...</option>
+              <option value="AA">AA (Normal)</option>
+              <option value="AS">AS (Carrier)</option>
+              <option value="AC">AC (Carrier)</option>
+              <option value="SS">SS (Sickle Cell)</option>
+              <option value="SC">SC (Sickle Cell)</option>
+              <option value="CC">CC (Rare)</option>
+            </select>
+          </div>
+          <div class="actions">
+            <button type="submit" id="testBtn">💾 Save Test Results</button>
+            <button type="button" id="previewBtn">👁️ Preview Data</button>
+          </div>
+        </form>
+        <div id="testMsg" class="message" style="display:none;"></div>
+      </div>
+    </div>
+
+    <!-- Search Records -->
+    <div class="tab-content" id="searchContent">
+      <div class="card-section">
+        <h2>Search Patient Records</h2>
+        <div class="search-box">
+          <input type="text" id="patientIdSearch" placeholder="Enter Patient ID">
+          <button id="searchBtn">Search</button>
+        </div>
+        <div id="resultBoxSearch"></div>
+      </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="modalPreview" class="modal" style="display:none;">
+      <div class="modal-content">
+        <button class="close-modal" id="closeModal" aria-label="Close Preview">&times;</button>
+        <div id="modalBody"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔹 Firebase SDKs (Compat version for easy HTML use) -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    // ✅ Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAawmwfttisfFCn69PzcNex92MrEQFJKGY",
+      authDomain: "savenextgen-82dd9.firebaseapp.com",
+      projectId: "savenextgen-82dd9",
+      storageBucket: "savenextgen-82dd9.appspot.com",
+      messagingSenderId: "477588752231",
+      appId: "1:477588752231:web:957eeb87655319dab251c2",
+      measurementId: "G-RCG02K3GVN"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  </script>
+
+  <!-- 🔹 Your custom app logic (edited) -->
+  <script src="app.js"></script>
+</body>
+</html>
